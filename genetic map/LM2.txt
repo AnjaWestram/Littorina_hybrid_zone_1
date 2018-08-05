@@ -1,0 +1,18 @@
+# Lepmap2
+
+# Filtering
+# Filters: (i) segregation distortion for p < 0.01 (default) (ii) remove sites with more than 50% missing data
+java Filtering data=MAP02.removed_all_missing_markers.linkage outputHWE=1 missingLimit=92 > MAP02.removed_all_missing_markers2.filtered
+
+
+# Cluster into linkage groups
+java SeparateChromosomes data=MAP02.removed_all_missing_markers2.filtered lodLimit=12 sizeLimit=20 > map.txt
+
+# Joining single markers that did not cluster in the previous step, wherever possible
+java JoinSingles map.txt lodLimit=3 data=MAP02.removed_all_missing_markers2.filtered > map_js.txt
+
+# Order within linkage groups
+infile=$SGE_TASK_ID
+
+outfile=order1_chr$SGE_TASK_ID.txt
+java OrderMarkers map=map_js.txt data=MAP02.removed_all_missing_markers2.filtered useKosambi=1 chromosome=$infile numThreads=2 initRecombination=0.005 0.005 polishWindow=100 filterWindow=10 > $outfile
