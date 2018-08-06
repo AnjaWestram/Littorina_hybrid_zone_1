@@ -1,4 +1,6 @@
 #awk -f vcf2posterior.awk input.vcf >output.posterior
+# from https://github.com/jleluyer/lepmap2_workflow/blob/master/00_scripts/utilities/vcf2posterior.awk
+
 BEGIN{
 	FS="\t"
 	for (i = 0; i <= 1000; ++i)
